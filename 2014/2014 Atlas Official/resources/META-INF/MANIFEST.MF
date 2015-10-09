@@ -1,0 +1,6 @@
+MIDlet-Name: 2014 Java Official
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: FIRST
+MIDlet-1: Atlas2014, , edu.wpi.first.wpilibj.templates.Atlas2014
+MicroEdition-Profile: IMP-1.0
+MicroEdition-Configuration: CLDC-1.1
