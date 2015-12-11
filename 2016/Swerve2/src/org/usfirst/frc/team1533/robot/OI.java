@@ -2,7 +2,6 @@ package org.usfirst.frc.team1533.robot;
 
 import edu.wpi.first.wpilibj.buttons.Button;
 
-import org.usfirst.frc.team1533.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1533.robot.subsystems.AbsoluteEncoder;
 import org.usfirst.frc.team1533.robot.subsystems.SwerveDrive;
 import org.usfirst.frc.team1533.robot.subsystems.SwerveModule;
