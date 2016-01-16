@@ -102,8 +102,10 @@ public class SwerveDrive extends Subsystem {
 		double power;
 		for (int i = 0; i < modules.length; i++) {
 			power = vects[i].getMagnitude() / maxPower; //scale down by the largest power that exceeds 100%
-			if (power > .01) {
-				modules[i].set(vects[i].getAngle(), power);
+			if (power > .05) {
+				modules[i].set(vects[i].getAngle()-Math.PI/2, power);
+			} else {
+				modules[i].rest();
 			}
 		}
 	}

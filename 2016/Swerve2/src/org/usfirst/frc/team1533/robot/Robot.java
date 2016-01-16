@@ -6,7 +6,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+import org.usfirst.frc.team1533.robot.subsystems.AbsoluteEncoder;
 import org.usfirst.frc.team1533.robot.subsystems.SwerveDrive;
+import org.usfirst.frc.team1533.robot.subsystems.SwerveModule;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -41,7 +43,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
-    	swerve.enable();
+//    	swerve.enable();
     }
 
     /**
@@ -67,14 +69,13 @@ public class Robot extends IterativeRobot {
     public void disabledInit(){
     	swerve.disable();
     }
-
+    
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        
-        swerve.driveNormal(joy1.getX(), -joy1.getY(), joy1.getZ());
+        swerve.driveNormal(joy1.getX()/2, -joy1.getY()/2, joy1.getZ()/2);
     }
     
     /**

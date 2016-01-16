@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj.*;
 public class SwerveModule {
     PIDController steerPID;
     SpeedController steerController, driveController; //SpeedController used so this can be talon, victor, jaguar, CAN talon...
-    AbsoluteEncoder steerEncoder;
+    public AbsoluteEncoder steerEncoder;
     double positionX, positionY; //position of this wheel relative to the center of the robot
     //from the robot's perspective, +y is forward and +x is to the right
+    boolean enabled = false;
     
     /**
      * @param driveController motor controller for drive motor
@@ -34,18 +35,19 @@ public class SwerveModule {
     	steerPID.setInputRange(0, 2*Math.PI);
     	steerPID.setOutputRange(-Constants.SWERVE_STEER_CAP, Constants.SWERVE_STEER_CAP);
     	steerPID.setContinuous();
-    	steerPID.setSetpoint(Math.PI/2);
     	steerPID.disable();
     }
     
     public void enable() {
     	steerPID.enable();
+    	enabled = true;
     }
     
     public void disable() {
     	steerPID.disable();
     	driveController.set(0);
     	steerController.set(0);
+    	enabled = false;
     }
     
     /**
@@ -53,6 +55,7 @@ public class SwerveModule {
      * @param speed motor speed [-1 to 1]
      */
     public void set(double angle, double speed) {
+    	if (!enabled) return;
     	angle = wrapAngle(angle);
     	double dist = Math.abs(angle-steerEncoder.getAngle());
     	//if the setpoint is more than 90 degrees from the current position, flip everything
@@ -62,6 +65,10 @@ public class SwerveModule {
     	}
     	steerPID.setSetpoint(angle);
     	driveController.set(Math.max(-1, Math.min(1, speed))); //coerce speed between -1 and 1
+    }
+    
+    public void rest() {
+    	driveController.set(0);
     }
     
     private double wrapAngle(double angle) {
