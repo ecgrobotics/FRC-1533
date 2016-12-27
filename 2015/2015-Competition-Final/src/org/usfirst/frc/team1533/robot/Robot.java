@@ -60,10 +60,11 @@ public class Robot extends IterativeRobot {
     		    	SmartDashboard.putNumber("brdist", back.getRightDistance());
     		    	SmartDashboard.putNumber("flift" , front.getHeight());
     		    	SmartDashboard.putNumber("blift" , back.getHeight());
-    		    	SmartDashboard.putNumber("fli", pdp.getCurrent(5));
-    		    	SmartDashboard.putNumber("bri",pdp.getCurrent(6));//4
-    		    	SmartDashboard.putNumber("fri",pdp.getCurrent(9));
-    		    	SmartDashboard.putNumber("bli", pdp.getCurrent(7));//8
+//    		    	SmartDashboard.putNumber("fli", pdp.getCurrent(5));
+//    		    	SmartDashboard.putNumber("bri",pdp.getCurrent(6));//4
+//    		    	SmartDashboard.putNumber("fri",pdp.getCurrent(9));
+//    		    	SmartDashboard.putNumber("bli", pdp.getCurrent(7));//8
+    		    	swerve.putCalib();
     		    	SmartDashboard.putBoolean("reversed", reversed);
     		    	SmartDashboard.putNumber("speed", encoder.getRate()/12.0);//TODO DUNCAN!!!!!!!! we wants the speeeeeeed
     		    	SmartDashboard.putNumber("dir",dof.getYaw());
@@ -98,7 +99,7 @@ public class Robot extends IterativeRobot {
     	dof.startGyroIntegrator();
     }
     public void disabledPeriodic() {
-    	System.out.println("front: "+front.getHeight()+" back: "+back.getEncoderValue());
+//    	System.out.println("front: "+front.getHeight()+" back: "+back.getEncoderValue());
     }
     public boolean delay(double s){
     	if(!this.isAutonomous()||this.isDisabled()){
@@ -254,7 +255,7 @@ public class Robot extends IterativeRobot {
 	    			}
     			}
     			if(delay(.5))return;
-    			auton.move(.4, 0, 94, 0, false);
+    			auton.move(.6, 0, 94, 0, false);
     		}
     	};
 //    	auto = new Thread() {
@@ -322,7 +323,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
 //    	System.out.println(dof.getYaw());
-//    	System.out.println(front.getRightDistance()+", "+back.getLeftDistance()+", "+back.getRightDistance());
+//    	System.out.println(front.getRightDistance()+", "+back.getLeftDistanccxe()+", "+back.getRightDistance());
     	if (joy1.getRawButton(4)) front.set(-1);
     	else if (joy1.getRawButton(1)) front.set(1);	
     	else front.set(joy2.getRawAxis(3));

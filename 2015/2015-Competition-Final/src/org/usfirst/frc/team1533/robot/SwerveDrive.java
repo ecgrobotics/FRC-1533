@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1533.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class SwerveDrive {
 	static final int FL = 0,
 			FR = 1,
@@ -35,18 +37,18 @@ public class SwerveDrive {
 		w = chassisWidth;
 		l = chassisLength;
 		this.dof = dof;
-		modules[FL] = new SwerveModule(0, 4, 0, -w/2, l/2, 0);
+		modules[FL] = new SwerveModule(0, 4, 0, -w/2, l/2, 96.695);
 //		modules[FL] = new SwerveModule(0, 4, 0, -w/2, l/2, 25, 24, 25, 23, dof);
-		modules[FR] = new SwerveModule(1, 5, 1, w/2, l/2, 165);
-		modules[BL] = new SwerveModule(2, 6, 2, -w/2, -l/2, -113);
-		modules[BR] = new SwerveModule(3, 7, 3, w/2, -l/2, 13);
+		modules[FR] = new SwerveModule(1, 5, 1, w/2, l/2, 164.237);
+		modules[BL] = new SwerveModule(2, 6, 2, -w/2, -l/2, -98.892);
+		modules[BR] = new SwerveModule(3, 7, 3, w/2, -l/2, -166.052);
 //		encoderModule = modules[FL];
 		t = new Thread() {
 			public void run() {
 				while (true) {
 					loop();
 					try {
-					Thread.sleep(DELAY);
+					    Thread.sleep(DELAY);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -121,6 +123,7 @@ public class SwerveDrive {
 			sy[i] = -modules[i].mx + pivotX;
 			maxSteer = Math.max(maxSteer, Math.hypot(sx[i], sy[i]));
 		}
+		//
 		for (int i = 0; i < modules.length; i++) {
 			sx[i] *= r / maxSteer;
 			sy[i] *= r / maxSteer;
@@ -245,6 +248,13 @@ public class SwerveDrive {
 	public void setPivot(double x, double y) {
 		pivotX = x;
 		pivotY = y;
+	}
+	
+	public void putCalib() {
+        SmartDashboard.putNumber("fl calib", (modules[FL].getAngle() * 180 / Math.PI + modules[FL].calib) % 360);
+        SmartDashboard.putNumber("fr calib", (modules[FR].getAngle() * 180 / Math.PI + modules[FR].calib) % 360);
+        SmartDashboard.putNumber("bl calib", (modules[BL].getAngle() * 180 / Math.PI + modules[BL].calib) % 360);
+        SmartDashboard.putNumber("br calib", (modules[BR].getAngle() * 180 / Math.PI + modules[BR].calib) % 360);
 	}
 	
 }
