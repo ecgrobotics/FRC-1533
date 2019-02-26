@@ -10,7 +10,7 @@ public class Joystick {
 	private int port;
 	private Controller c;
 	private static final String[] axes = {
-		"X Axis", "Y Axis", "Z Axis", "Z Rotation"
+		"X Axis", "Y Axis", "X Rotation", "Y Rotation"
 	};
 	
 	public Joystick(int port) {

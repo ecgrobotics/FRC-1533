@@ -7,6 +7,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -23,25 +24,25 @@ class RobotWorld implements MouseListener, ComponentListener {
 			RC_DELAY = 1;
 	static final int WIDTH = 1296,
 			HEIGHT = 592;
+	static final double PPI = 2;
 	public static RobotWorld world;
 	RobotBase robot;
 	JFrame frame;
 	JPanel panel;
 	Thread gThread, pThread, rcThread;
 	ArrayList<Controller> joysticks = new ArrayList<Controller>();
-	boolean teleop = true, disabled = true;
+	boolean teleop = true, disabled = false;
 	JFrame sFrame;
 	JPanel sPanel;
 	JButton enable, disable, auto, tele;
 	JLabel label1, label2;
-	BufferedImage bi;
+	VolatileImage vi;
 	boolean painting = false;
 	
 	public RobotWorld(RobotBase robot) {
 		this.robot = robot;
-		bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
-		frame = new JFrame("FRC Virtual World");
+		frame = new JFrame("Swerve Sim");
 		panel = new JPanel();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel.setPreferredSize(new Dimension((int) (1296*1.25), (int) (592*1.25)));
@@ -49,6 +50,8 @@ class RobotWorld implements MouseListener, ComponentListener {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		panel.addMouseListener(this);
+		
+		vi = panel.createVolatileImage((int)(WIDTH*PPI), (int)(HEIGHT*PPI));
 		
 		sFrame = new JFrame("Control Panel");
 		sPanel = new JPanel();
@@ -225,33 +228,34 @@ class RobotWorld implements MouseListener, ComponentListener {
 		rcThread.start();
 
 		frame.setVisible(true);
-		sFrame.setVisible(true);
+//		sFrame.setVisible(true);
 	}
 	
 	public void paint() {
 		Graphics2D g = (Graphics2D) panel.getGraphics();
-		Graphics2D g2 = (Graphics2D) bi.getGraphics();
+		Graphics2D g2 = (Graphics2D) vi.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setColor(Color.white);
-		g2.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		g2.scale(1, -1);
-		g2.translate(bi.getWidth()/2, -bi.getHeight()/2);
+		g2.fillRect(0, 0, vi.getWidth(), vi.getHeight());
+		g2.scale(PPI, -PPI);
+		g2.translate(WIDTH/2, -HEIGHT/2);
 		robot.paint(g2);
 		int x, y, w, h;
-		if ((double) bi.getWidth() / bi.getHeight() > (double) panel.getWidth() / panel.getHeight()) {
+		if ((double) vi.getWidth() / vi.getHeight() > (double) panel.getWidth() / panel.getHeight()) {
 			w = panel.getWidth();
-			h = (int) ((double) w / bi.getWidth() * bi.getHeight());
+			h = (int) ((double) w / vi.getWidth() * vi.getHeight());
 			x = 0;
 			y = (panel.getHeight() - h) / 2;
 		} else {
 			h = panel.getHeight();
-			w = (int) ((double) h / bi.getHeight() * bi.getWidth());
+			w = (int) ((double) h / vi.getHeight() * vi.getWidth());
 			x = (panel.getWidth() - w) / 2;
 			y = 0;
 		}
 		g.setColor(Color.black);
 //		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-		g.drawImage(bi, x, y, w, h, null);
+		g.drawImage(vi, x, y, w, h, null);
 		g2.dispose();
 		g.dispose();
 	}

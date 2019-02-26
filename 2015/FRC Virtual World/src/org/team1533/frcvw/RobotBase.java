@@ -16,6 +16,7 @@ abstract class RobotBase {
 	double lastAngle = forward.angleDegrees();
 	
 	public static void main(String[] args) {
+//		new Console();
 		try {
 			String className  = System.getProperty("sun.java.command");
 			System.out.println(className);
